@@ -59,8 +59,14 @@ class FileStorage:
             k_cls = d['__class__']
             FileStorage.__objects[o_id] = FileStorage.CNC[k_cls](**d)
 
-    def delete_all(self):
+    def delete_all(self, cls=None):
         """deletes all stored objects, for testing purposes"""
         del FileStorage.__objects
         FileStorage.__objects = {}
         self.save()
+
+    def delete(self, obj=None):
+        
+        if obj:
+            del obj.__objects
+            
