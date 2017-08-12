@@ -105,13 +105,59 @@ class HBNBCommand(cmd.Cmd):
                  City.create()
         """
         arg = arg.split()
+
         error = self.__class_err(arg)
         if not error:
             for k, v in CNC.items():
                 if k == arg[0]:
                     my_obj = v()
                     my_obj.save()
-                    print(my_obj.id)
+
+        # remove obj name in list
+        arg.pop(0)
+
+        # prep new_dict with proper format
+        new_dict = dict(idx.split('=') for idx in arg)
+
+        for k, v in new_dict.items():
+
+            # remove double quotes from end & beginning
+            # and replace '_' with ' '
+            value = v.strip('"').replace('_', ' ')
+
+            # check for negative
+            isNegative = False
+            if (value[0] is "-"):
+                isNegative = True
+                value = value[1:]
+
+            isInt = False
+            isFloat = False
+            # check for int
+            if (value.isdigit() is True):
+                if (isNegative is True):
+                    value = "-" + value
+                isInt = True
+
+            # check for float and convert
+            if ("." in value):
+                value = value.split(".")
+                if (value[0].isdigit() is True and value[1].isdigit() is True):
+                    value = ".".join(value)
+                    if (isNegative is True):
+                        value = "-" + value
+                    isFloat = True
+
+            if (isInt is True):
+                value = int(value)
+            if (isFloat is True):
+                value = float(value)
+
+            new_dict[k] = value
+
+        my_obj.__dict__.update(new_dict)
+        my_obj.save()
+        print(my_obj.id)
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
