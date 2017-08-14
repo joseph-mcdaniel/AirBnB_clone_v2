@@ -7,6 +7,7 @@ from datetime import datetime
 import models
 import json
 import os
+import inspect
 
 User = models.user.User
 BaseModel = models.base_model.BaseModel
@@ -17,6 +18,8 @@ F = './dev/file.json'
 
 class TestFileStorageDocs(unittest.TestCase):
     """Class for testing BaseModel docs"""
+
+    all_funcs = inspect.getmembers(FileStorage, inspect.isfunction)
 
     @classmethod
     def setUpClass(cls):
@@ -38,31 +41,11 @@ class TestFileStorageDocs(unittest.TestCase):
         actual = FileStorage.__doc__
         self.assertEqual(expected, actual)
 
-    def test_doc_all(self):
-        """... documentation for all function"""
-        expected = 'returns private attribute: __objects'
-        actual = FileStorage.all.__doc__
-        self.assertEqual(expected, actual)
-
-    def test_doc_new(self):
-        """... documentation for new function"""
-        expected = ("sets / updates in __objects the obj with key <obj class "
-                    "name>.id")
-        actual = FileStorage.new.__doc__
-        self.assertEqual(expected, actual)
-
-    def test_doc_save(self):
-        """... documentation for save function"""
-        expected = 'serializes __objects to the JSON file (path: __file_path)'
-        actual = FileStorage.save.__doc__
-        self.assertEqual(expected, actual)
-
-    def test_doc_reload(self):
-        """... documentation for reload function"""
-        expected = ("if file exists, deserializes JSON file to __objects, "
-                    "else nothing")
-        actual = FileStorage.reload.__doc__
-        self.assertEqual(expected, actual)
+    def test_all_function_docs(self):
+        """... tests for ALL DOCS for all functions in file_storage file"""
+        AF = TestFileStorageDocs.all_funcs
+        for f in AF:
+            self.assertTrue(len(f[1].__doc__) > 1)
 
 
 class TestBmFsInstances(unittest.TestCase):
