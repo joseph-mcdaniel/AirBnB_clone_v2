@@ -96,6 +96,11 @@ github repo
 * MJ Johnson, [@mj31508](https://github.com/mj31508)
 * David John Coleman II, [davidjohncoleman.com](http://www.davidjohncoleman.com/)
 
+##Contributing Authors:
+
+* Hunter Casbeer, [@spacex3ngineer](https://github.com/spacexengineer)
+* Joe McDaniel, [@joe_w_mcdaniel ](https://github.com/joseph-mcdaniel)
+
 ## License
 
 Public Domain, no copyright protection
