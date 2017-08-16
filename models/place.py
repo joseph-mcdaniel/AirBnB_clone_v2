@@ -9,8 +9,9 @@ from sqlalchemy.orm import relationship
 from models import *
 from os import getenv
 
+
 class PlaceAmenity(Base):
-    """A  SQLAlchemy Table for Place and Amenity"""
+    """A SQLAlchemy Table for Place and Amenity"""
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
         __tablename__ = "place_amenity"
