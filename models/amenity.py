@@ -7,9 +7,10 @@ from models.base_model import BaseModel
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from models import *
+from os import getenv
 
 
-class Amenity(BaseModel):
+class Amenity(BaseModel, Base):
     """Amenity class handles all application amenities"""
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = "amenities"
