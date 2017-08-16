@@ -4,8 +4,8 @@ database storage
 """
 from models import base_model, amenity, city, place, review, state, user
 from os import environ, getenv
-import sqlalchemy import create_engine
-import sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class DBStorage:
