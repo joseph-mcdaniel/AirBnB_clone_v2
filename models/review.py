@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from models import *
 from os import getenv
 
+
 class Review(BaseModel, Base):
     """Review class handles all application reviews"""
 
