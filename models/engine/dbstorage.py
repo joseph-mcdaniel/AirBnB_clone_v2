@@ -13,11 +13,11 @@ class DBStorage:
     __session = None
 
     def init(self):
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                                      .format(environ['HBNB_MYQL_USER'],
-                                              environ['HBNB_MYSQL_PWD'],
-                                              environ['HBNB_MYSQL_HOST'],
-                                              environ['HBNB_MYSQL_DB']))
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}{}'
+                                      .format(getenv('HBNB_MYQL_USER'),
+                                              getenv('HBNB_MYSQL_PWD'),
+                                              getenv('HBNB_MYSQL_HOST'),
+                                              getenv('HBNB_MYSQL_DB')))
         self.__models = {'User': User,
                          'Amenity': Amenity,
                          'City': City,
