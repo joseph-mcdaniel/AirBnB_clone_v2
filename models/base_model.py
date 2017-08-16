@@ -26,8 +26,38 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
-        self.id = str(uuid4())
-        self.created_at = now()
+        """
+        print(kwargs)
+        # Make sure that the 'self' instance has all the attributes from kwargs
+        self.setattr(attr, val for attr, val in kwargs.items())
+        """
+        if kwargs:
+            self.__set_attributes(kwargs)
+        else:
+            self.id = str(uuid4())
+            self.created_at = now()
+
+    def __set_attributes(self, kwargs):
+        converts kwargs values to python class attributes
+        if 'id' not in kwargs:
+            kwargs['id'] = str(uuid4())
+        if 'created_at' not in kwargs:
+            kwargs['created_at'] = now()
+        elif not isinstance(kwargs['created_at'], datetime):
+            kwargs['created_at'] = strptime(kwargs['created_at'],
+                                            "%Y-%m-%d %H:%M:%S.%f")
+        if 'updated_at' in kwargs:
+            if not isinstance(kwargs['updated_at'], datetime):
+                kwargs['updated_at'] = strptime(kwargs['updated_at'],
+                                                "%Y-%m-%d %H:%M:%S.%f")
+        """(check if FS or DB model)"""
+
+        if getenv('HBNB_TYPE_STORAGE') != 'db':
+            if '__class__' in kwargs:
+                kwargs.pop('__class__')
+                for attr, val in kwargs.items():
+                    setattr(self, attr, val)
+                models.storage.new(self)
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""
@@ -67,22 +97,3 @@ class BaseModel:
     def delete(self):
         """delete the current instance from models.storage"""
         models.storage.delete(self)
-
-"""
-    def __set_attributes(self, d):
-        converts kwargs values to python class attributes
-        if 'id' not in d:
-            d['id'] = str(uuid4())
-        if 'created_at' not in d:
-            d['created_at'] = now()
-        elif not isinstance(d['created_at'], datetime):
-            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S.%f")
-        if 'updated_at' in d:
-            if not isinstance(d['updated_at'], datetime):
-                d['updated_at'] = strptime(d['updated_at'],
-                                           "%Y-%m-%d %H:%M:%S.%f")
-        if '__class__' in d:
-            d.pop('__class__')
-        self.__dict__ = d
-        models.storage.new(self)
-"""
