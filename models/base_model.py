@@ -9,6 +9,7 @@ from uuid import uuid4, UUID
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from os import getenv
 
 now = datetime.now
 strptime = datetime.strptime
