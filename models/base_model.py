@@ -38,7 +38,7 @@ class BaseModel:
             self.created_at = now()
 
     def __set_attributes(self, kwargs):
-        converts kwargs values to python class attributes
+        """converts kwargs values to python class attributes"""
         if 'id' not in kwargs:
             kwargs['id'] = str(uuid4())
         if 'created_at' not in kwargs:
