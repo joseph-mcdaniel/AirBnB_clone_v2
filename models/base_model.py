@@ -14,37 +14,20 @@ now = datetime.now
 strptime = datetime.strptime
 Base = declarative_base()
 
+
 class BaseModel:
     """attributes and functions for BaseModel class"""
-    id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), primary_key=True, nullable=False)
+        created_at = Column(DateTime,
+                            default=datetime.utcnow(), nullable=False)
+        updated_at = Column(DateTime,
+                            default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
-        if kwargs:
-            self.__set_attributes(kwargs)
-        else:
-            self.id = str(uuid4())
-            self.created_at = now()
-
-
-    def __set_attributes(self, d):
-        """converts kwargs values to python class attributes"""
-        if 'id' not in d:
-            d['id'] = str(uuid4())
-        if 'created_at' not in d:
-            d['created_at'] = now()
-        elif not isinstance(d['created_at'], datetime):
-            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S.%f")
-        if 'updated_at' in d:
-            if not isinstance(d['updated_at'], datetime):
-                d['updated_at'] = strptime(d['updated_at'],
-                                           "%Y-%m-%d %H:%M:%S.%f")
-        if '__class__' in d:
-            d.pop('__class__')
-        self.__dict__ = d
-        models.storage.new(self)
+        self.id = str(uuid4())
+        self.created_at = now()
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""
@@ -80,3 +63,26 @@ class BaseModel:
         """returns string type representation of object instance"""
         cname = type(self).__name__
         return "[{}] ({}) {}".format(cname, self.id, self.__dict__)
+
+    def delete(self):
+        """delete the current instance from models.storage"""
+        models.storage.delete(self)
+
+"""
+    def __set_attributes(self, d):
+        converts kwargs values to python class attributes
+        if 'id' not in d:
+            d['id'] = str(uuid4())
+        if 'created_at' not in d:
+            d['created_at'] = now()
+        elif not isinstance(d['created_at'], datetime):
+            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S.%f")
+        if 'updated_at' in d:
+            if not isinstance(d['updated_at'], datetime):
+                d['updated_at'] = strptime(d['updated_at'],
+                                           "%Y-%m-%d %H:%M:%S.%f")
+        if '__class__' in d:
+            d.pop('__class__')
+        self.__dict__ = d
+        models.storage.new(self)
+"""
