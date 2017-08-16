@@ -9,11 +9,10 @@ from sqlalchemy.orm import relationship
 from models import *
 from os import getenv
 
-
 class Review(BaseModel, Base):
     """Review class handles all application reviews"""
 
-    if environ.get("HBNB_TYPE_STORAGE") == "db":
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         __tablename__ = "reviews"
         text = Column(String(1024), nullable=False)
         place_id = Column(String(60), ForeignKey("places.id"), nullable=False)
