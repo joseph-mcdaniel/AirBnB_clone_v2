@@ -10,6 +10,18 @@ from models import *
 from os import getenv
 
 
+class PlaceAmenity(Base):
+    """A  SQLAlchemy Table for Place and Amenity"""
+
+    if environ.get("HBNB_TYPE_STORAGE") == "db":
+        __tablename__ = "place_amenity"
+        metadata = Base.metadata
+        place_id = Column(String(60), ForeignKey("places.id"),
+                          nullable=False, primary_key=True)
+        amenity_id = Column(String(60), ForeignKey("amenities.id"),
+                            nullable=False, primary_key=True)
+
+
 class Place(BaseModel, Base):
     """Place class handles all application places"""
 
