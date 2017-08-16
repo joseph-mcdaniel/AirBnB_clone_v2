@@ -26,7 +26,7 @@ class DBStorage:
                          'State': State}
 
         if getenv('HBNB_ENV') == "test":
-            metadata.drop_all(self.__engine)
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         obj = {}
@@ -45,5 +45,5 @@ class DBStorage:
         self.__session.remove()
 
     def reload(self):
-        metadata.create_all(self.__engine)
+        Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
