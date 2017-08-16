@@ -111,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
             for k, v in CNC.items():
                 if k == arg[0]:
                     my_obj = v()
-                    my_obj.save()
+                    # my_obj.save()
 
         try:
             # remove obj name in list
@@ -156,11 +156,11 @@ class HBNBCommand(cmd.Cmd):
                     value = float(value)
 
                 new_dict[k] = value
-
+                
             my_obj.__dict__.update(new_dict)
-            my_obj.save()
         except:
             pass
+        my_obj.save()
         print(my_obj.id)
 
     def do_show(self, arg):
