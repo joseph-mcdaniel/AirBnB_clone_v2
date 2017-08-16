@@ -9,11 +9,10 @@ from sqlalchemy.orm import relationship
 from models import *
 from os import getenv
 
-
 class PlaceAmenity(Base):
     """A  SQLAlchemy Table for Place and Amenity"""
 
-    if environ.get("HBNB_TYPE_STORAGE") == "db":
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         __tablename__ = "place_amenity"
         metadata = Base.metadata
         place_id = Column(String(60), ForeignKey("places.id"),
