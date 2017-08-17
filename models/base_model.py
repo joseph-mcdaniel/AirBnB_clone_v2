@@ -19,7 +19,7 @@ Base = declarative_base()
 class BaseModel:
     """attributes and functions for BaseModel class"""
     if getenv('HBNB_TYPE_STORAGE') == 'db':
-        id = Column(String(60), primary_key=True, nullable=False)
+        id = Column(String(60), unique=True, primary_key=True, nullable=False)
         created_at = Column(DateTime,
                             default=datetime.utcnow(), nullable=False)
         updated_at = Column(DateTime,
@@ -53,12 +53,10 @@ class BaseModel:
                                                 "%Y-%m-%d %H:%M:%S.%f")
         """(check if FS or DB model)"""
 
-        if getenv('HBNB_TYPE_STORAGE') != 'db':
-            if '__class__' in kwargs:
-                kwargs.pop('__class__')
-                for attr, val in kwargs.items():
-                    setattr(self, attr, val)
-                models.storage.new(self)
+        if getenv('HBNB_TYPE_STORAGE') != 'db' and '__class__' in kwargs:
+            del kwargs['__class__']
+        for attr, val in kwargs.items():
+            setattr(self, attr, val)
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""
@@ -88,6 +86,8 @@ class BaseModel:
             else:
                 bm_dict[k] = str(v)
         bm_dict["__class__"] = type(self).__name__
+        if "_sa_instance_state" in bm_dict:
+            del bm_dict["_sa_instance_state"]
         return(bm_dict)
 
     def __str__(self):
