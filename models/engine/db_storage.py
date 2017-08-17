@@ -16,6 +16,7 @@ from models.user import User
 
 
 class DBStorage:
+    """New engine to handle objects in sqlalchemy table"""
     __engine = None
     __session = None
 
@@ -29,6 +30,7 @@ class DBStorage:
     }
 
     def __init__(self):
+        """connect to MySQL database"""
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
                                       .format(getenv('HBNB_MYSQL_USER'),
                                               getenv('HBNB_MYSQL_PWD'),
@@ -38,6 +40,7 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """query on all objects in database"""
         ob_dict = {}
         if cls:
             for ob in self.__session.query(cls):
@@ -51,16 +54,20 @@ class DBStorage:
         return ob_dict
 
     def new(self, obj):
+        """add object to current database"""
         if obj:
             self.__session.add(obj)
 
     def save(self):
+        """commit changes to current database"""
         self.__session.commit()
 
     def delete(self, obj=None):
+        """delete from current database"""
         if obj:
             self.__session.remove()
 
     def reload(self):
+        """create all tables in database"""
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
