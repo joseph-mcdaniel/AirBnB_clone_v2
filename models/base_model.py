@@ -14,12 +14,11 @@ from os import getenv
 now = datetime.now
 strptime = datetime.strptime
 Base = declarative_base()
-"""
+
 if getenv('HBNB_TYPE_STORAGE') == 'db':
     Base = declarative_base()
 else:
     Base = object
-"""
 
 
 class BaseModel:
