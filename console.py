@@ -156,7 +156,6 @@ class HBNBCommand(cmd.Cmd):
                     value = float(value)
 
                 new_dict[k] = value
-                
             my_obj.__dict__.update(new_dict)
         except:
             pass
