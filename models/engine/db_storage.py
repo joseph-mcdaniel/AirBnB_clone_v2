@@ -7,11 +7,26 @@ from models.base_model import Base
 from os import environ, getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class DBStorage:
     __engine = None
     __session = None
+
+    CNC = {
+        'Amenity': Amenity,
+        'City': City,
+        'Place': Place,
+        'Review': Review,
+        'State': State,
+        'User': User
+    }
 
     def __init__(self):
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
@@ -19,23 +34,21 @@ class DBStorage:
                                               getenv('HBNB_MYSQL_PWD'),
                                               getenv('HBNB_MYSQL_HOST'),
                                               getenv('HBNB_MYSQL_DB')))
-        """
-        self.__models = {'User': User,
-                         'Amenity': Amenity,
-                         'City': City,
-                         'Place': Place,
-                         'Review': Review,
-                         'State': State}
-        """
         if getenv('HBNB_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        obj = {}
+        ob_dict = {}
         if cls:
-            for object in self.__session.query(self.__models[cls]):
-                obj[object.__dict__['id']] = object
-        return obj
+            for ob in self.__session.query(cls):
+                ob_key = "{}.{}".format(type(ob).__name__, ob.id)
+                ob_dict[ob_key] = ob
+        else:
+            for clas in DBStorage.CNC.values():
+                for ob in self.__session.query(clas):
+                    ob_key = "{}.{}".format(type(ob).__name__, ob.id)
+                    ob_dict[ob_key] = ob
+        return ob_dict
 
     def new(self, obj):
         if obj:
