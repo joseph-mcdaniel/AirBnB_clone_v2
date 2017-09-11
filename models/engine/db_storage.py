@@ -43,7 +43,7 @@ class DBStorage:
         """query on all objects in database"""
         ob_dict = {}
         if cls:
-            for ob in self.__session.query(cls):
+            for ob in self.__session.query(DBStorage.CNC[cls]):
                 ob_key = "{}.{}".format(type(ob).__name__, ob.id)
                 ob_dict[ob_key] = ob
         else:
@@ -65,9 +65,13 @@ class DBStorage:
     def delete(self, obj=None):
         """delete from current database"""
         if obj:
-            self.__session.remove()
+            self.__session.delete(obj)
 
     def reload(self):
         """create all tables in database"""
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
+
+    def close(self):
+        """close private session"""
+        self.__session.remove()
