@@ -6,9 +6,9 @@ app.url_map.strict_slashes = False
 
 
 @app.route('/states_list', methods=['GET'])
-def states():
-    state = storage.all("State").values()
-    return render_template("7-states_list.html", state=state)
+def state():
+    state = storage.all('State').values()
+    return (render_template('7-states_list.html', state=state))
 
 
 @app.teardown_appcontext
