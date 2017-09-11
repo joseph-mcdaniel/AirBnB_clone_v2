@@ -28,9 +28,16 @@ class FileStorage:
     __file_path = './dev/file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """returns private attribute: __objects"""
-        return FileStorage.__objects
+        if cls is None:
+            return FileStorage.__objects
+        else:
+            new_obj = {}
+            for k, v in FileStorage.__objects.items():
+                if v.__class__.__name__ == cls:
+                    result[k] = v
+            return new_obj
 
     def new(self, obj):
         """sets / updates in __objects the obj with key <obj class name>.id"""
@@ -70,3 +77,7 @@ class FileStorage:
         if obj:
             ob_format = "{}.{}".format(type(obj).__name__, obj.id)
             del FileStorage.__objects[ob_format]
+
+    def close(self):
+        """method for deserializing the JSON file to objects"""
+        self.reload()
